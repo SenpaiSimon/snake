@@ -1,0 +1,33 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "defaultGcc",
+            "displayName": "Default GCC",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "inherits": "defaultGcc",
+            "name": "debug",
+            "displayName": "GCC Debug",
+            "description": "Default Debug Target",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "inherits": "defaultGcc",
+            "name": "release",
+            "displayName": "GCC Release",
+            "description": "Default Release Target",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ]
+}
