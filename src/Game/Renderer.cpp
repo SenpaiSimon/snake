@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace Game {
-Renderer::Renderer(size_t fps, SDL_Window* window) : mFps(fps), mWindow(window) {
+Renderer::Renderer(SDL_Window* window) : mWindow(window) {
     mRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(mRenderer);
@@ -24,14 +24,6 @@ void Renderer::Stop() {
 }
 
 void Renderer::ProcessFrame() {
-    SDL_Event event;
-    
-    while(SDL_PollEvent(&event)) {
-        if(event.type == SDL_QUIT) {
-            mRunning = false;
-        }
-    }
-
     SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(mRenderer);
     
@@ -41,6 +33,5 @@ void Renderer::ProcessFrame() {
     }
 
     SDL_RenderPresent(mRenderer);
-    SDL_Delay(1000 / mFps);
 }
 };
