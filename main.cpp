@@ -1,6 +1,7 @@
 #include "SDL.h" 
 
 #include "Snake.h"
+#include "Renderer.h"
 #include <vector>
 #include <memory>
 
@@ -17,30 +18,18 @@ int main(int argc, char *argv[])
     0
   );
 
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderClear(renderer);
+  Game::Renderer renderer(60, window);
+  Object::Snake player(renderer.GetRenderer(), SDL_Point{10, 10}, SDL_Point{2, 2}, 40, 40);
 
-  std::vector<std::unique_ptr<Object::IObject>> objects;
-  objects.push_back(std::make_unique<Object::Snake>(
-    renderer, SDL_Point{10, 10}, SDL_Point{2, 2}, 40, 40)
-  );
+  renderer.RegisterObject(&player);
+  renderer.Start();
 
-  for(int i = 0; i < 1000; i++) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
-    
-    for(const auto& object : objects) {
-      object->Update();
-      object->Render();
-    }
-
-    SDL_RenderPresent(renderer);
-    SDL_Delay(10);
+  while(renderer.IsRunning()) {
+    renderer.ProcessFrame();
   }
 
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+  renderer.Stop();
+
 
   return 0;
 }
