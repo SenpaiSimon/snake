@@ -2,6 +2,7 @@
 
 #include "Snake.h"
 #include "Renderer.h"
+#include "KeyHandler.h"
 #include <vector>
 #include <memory>
 
@@ -19,10 +20,22 @@ int main(int argc, char *argv[])
   );
 
   Game::Renderer renderer(window);
-  Object::Snake player(renderer.GetRenderer(), SDL_Point{10, 10}, SDL_Point{2, 2}, 40, 40);
+  Game::KeyHandler keyHandler;
+  const auto snakeSpeed = 5;
+  Object::Snake player(renderer.GetRenderer(), SDL_Point{10, 10}, SDL_Point{snakeSpeed, 0}, 40, 40);
 
   renderer.RegisterObject(&player);
   renderer.Start();
+
+  // register keys
+  keyHandler.RegisterKey(SDLK_ESCAPE, SDL_KEYDOWN, std::bind(&Game::Renderer::Stop, &renderer));
+
+  keyHandler.RegisterKey(SDLK_UP, SDL_KEYDOWN,    std::bind(&Object::Snake::SetVel, &player, SDL_Point{  0, -snakeSpeed}));
+  keyHandler.RegisterKey(SDLK_DOWN, SDL_KEYDOWN,  std::bind(&Object::Snake::SetVel, &player, SDL_Point{  0,  snakeSpeed}));
+  keyHandler.RegisterKey(SDLK_RIGHT, SDL_KEYDOWN, std::bind(&Object::Snake::SetVel, &player, SDL_Point{ snakeSpeed,   0}));
+  keyHandler.RegisterKey(SDLK_LEFT, SDL_KEYDOWN,  std::bind(&Object::Snake::SetVel, &player, SDL_Point{-snakeSpeed,   0}));
+
+
 
   SDL_Event event;
   
@@ -33,9 +46,7 @@ int main(int argc, char *argv[])
         renderer.Stop();
       }
 
-      if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-        renderer.Stop();
-      }
+      keyHandler.Handle(event);
     }
 
     // lets render

@@ -3,7 +3,6 @@
 #include "IObject.h"
 #include "SDL.h"
 #include <vector>
-#include <thread>
 
 namespace Game {
 class Renderer {

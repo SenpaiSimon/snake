@@ -10,6 +10,12 @@ class Snake: public IObject {
         void Render() final;
         void Update() final;
 
+        void SetVel(SDL_Point vel) { mSpeed = vel; };
+        void SetPos(SDL_Point pos) { mPos = pos; };
+
+        SDL_Point GetVel() { return mSpeed; };
+        SDL_Point GetPos() { return mPos; };
+
     private:
         SDL_Point mPos;
         SDL_Point mSpeed;
